@@ -1,0 +1,17 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Backups exportados desde la app (quedan en Descargas del navegador,
+# pero por si alguno termina copiado dentro del proyecto)
+vianda-backup-*.json
+
+# Editores
+.vscode/
+.idea/
+
+#inteligencia Artificial
+.claude
+.codex
+
+

@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Tablita · Gestión diaria</title>
+<link rel="icon" type="image/svg+xml" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQyFbZR_pJDSn_7i3zImSg1hD55-rHcX7lj-AOcsLZBkBFLcS8eb-6dBeS&s=10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 8h16v2H4V8zm1 3h14l-1.2 9.2a1 1 0 01-1 .8H7.2a1 1 0 01-1-.8L5 11z" fill="#152A2C"/><path d="M9 8V6a3 3 0 013-3 3 3 0 013 3v2" stroke="#152A2C" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="brand-text">
+        <p class="name" id="negocioNombreDisplay">La Tablita</p>
+        <div class="sub">Gestión de pedidos diarios</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="btnConfig">⚙ Datos del negocio</button>
+      <button class="icon-btn" id="btnExport">⭳ Backup</button>
+      <button class="icon-btn" id="btnImport">⭱ Restaurar</button>
+      <input type="file" id="fileImport" accept="application/json" style="display:none;">
+    </div>
+  </div>
+  <nav class="tabs">
+    <button data-view="pedido" class="active">Nuevo pedido</button>
+    <button data-view="comandas">Comandas del día</button>
+    <button data-view="clientes">Clientes</button>
+    <button data-view="menu">Menú</button>
+    <button data-view="caja">Cierre de caja</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ========== NUEVO PEDIDO ========== -->
+  <section class="view active" id="view-pedido">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Nuevo pedido</h2>
+          <div class="hint">Cargá el cliente, agregá los platos y generá la comanda para cocina.</div>
+        </div>
+      </div>
+
+      <fieldset>
+        <label>Tipo de cliente</label>
+        <div class="radio-row">
+          <label><input type="radio" name="tipoCliente" value="fijo" checked> Cliente fijo</label>
+          <label><input type="radio" name="tipoCliente" value="ocasional"> Cliente ocasional</label>
+        </div>
+      </fieldset>
+
+      <div id="bloqueFijo" class="field combo-field">
+        <label for="clienteBuscador">Cliente</label>
+        <input type="text" id="clienteBuscador" placeholder="Escribí para buscar por nombre, dirección o código..." autocomplete="off">
+        <input type="hidden" id="clienteFijoId">
+        <button type="button" class="combo-clear" id="clienteClear" title="Quitar selección">✕</button>
+        <div class="combo-dropdown" id="clienteDropdown"></div>
+      </div>
+
+      <div id="bloqueOcasional" class="grid-2" style="display:none;">
+        <div class="field">
+          <label for="ocasionalNombre">Nombre del cliente</label>
+          <input type="text" id="ocasionalNombre" placeholder="Nombre y apellido">
+        </div>
+        <div class="field">
+          <label for="ocasionalTel">Teléfono (opcional)</label>
+          <input type="tel" id="ocasionalTel" placeholder="Ej: 381 555 1234">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="pedidoDireccion">Dirección de entrega</label>
+          <input type="text" id="pedidoDireccion" placeholder="Calle y número">
+        </div>
+        <div class="field">
+          <label for="pedidoHoraEntrega">Hora de entrega</label>
+          <select id="pedidoHoraEntrega">
+            <option value="">Seleccioná horario...</option>
+            <option value="11:00">11:00</option>
+            <option value="11:30">11:30</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+          </select>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--line); margin:20px 0;">
+
+      <label style="margin-bottom:10px;">Agregar plato</label>
+      <div class="item-row">
+        <div class="combo-field">
+          <label style="margin-bottom:4px;">Plato</label>
+          <input type="text" id="itemPlatoBuscador" placeholder="Buscar plato..." autocomplete="off">
+          <input type="hidden" id="itemPlatoId">
+          <div class="combo-dropdown" id="platoDropdown"></div>
+        </div>
+        <div>
+          <label style="margin-bottom:4px;">Guarnición</label>
+          <select id="itemGuarnicion"><option value="">—</option></select>
+        </div>
+        <div>
+          <label style="margin-bottom:4px;">Cant.</label>
+          <input type="number" id="itemCantidad" min="1" value="1">
+        </div>
+        <div>
+          <label style="margin-bottom:4px;">Precio</label>
+          <input type="text" id="itemPrecio" disabled>
+        </div>
+        <button class="btn btn-primary btn-small" id="btnAgregarItem" style="height:41px;">+ Agregar</button>
+      </div>
+
+      <div class="added-items" id="itemsAgregados">
+        <p class="muted" style="font-size:0.85rem;">Todavía no agregaste platos a este pedido.</p>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label for="pedidoNotas">Notas (opcional)</label>
+        <textarea id="pedidoNotas" rows="2" placeholder="Ej: sin sal, dejar en portería, etc."></textarea>
+      </div>
+
+      <div class="total-strip">
+        <span>Total del pedido</span>
+        <span class="amount" id="totalPedidoDisplay">$0</span>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="btnGuardarImprimir">Guardar e imprimir comanda</button>
+        <button class="btn btn-outline" id="btnGuardarSolo">Guardar sin imprimir</button>
+        <button class="btn btn-outline" id="btnLimpiarPedido" style="border-color:var(--rust); color:var(--rust);">Cancelar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMANDAS DEL DIA ========== -->
+  <section class="view" id="view-comandas">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Comandas del día</h2>
+          <div class="hint" id="fechaHoyLabel"></div>
+        </div>
+        <button class="btn btn-outline btn-small" id="btnRefrescarComandas">↻ Actualizar</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr><th>Ticket</th><th>Hora</th><th>Cliente</th><th>Dirección</th><th>Entrega</th><th>Total</th><th>Estado</th><th></th></tr>
+          </thead>
+          <tbody id="tablaComandas"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CLIENTES ========== -->
+  <section class="view" id="view-clientes">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Clientes fijos</h2>
+          <div class="hint">Clientes que piden de forma recurrente. Se cargan una vez y quedan disponibles al armar un pedido.</div>
+        </div>
+      </div>
+      <div id="clienteEditBanner" class="hint" style="display:none; color:var(--mustard-dark); font-weight:600; margin-bottom:10px;"></div>
+      <div class="grid-3">
+        <div class="field">
+          <label for="clienteNombre">Nombre y apellido</label>
+          <input type="text" id="clienteNombre" placeholder="Ej: Alberto Alighieri">
+        </div>
+        <div class="field">
+          <label for="clienteDireccion">Dirección habitual</label>
+          <input type="text" id="clienteDireccion" placeholder="Calle y número">
+        </div>
+        <div class="field">
+          <label for="clienteTelefono">Teléfono</label>
+          <input type="tel" id="clienteTelefono" placeholder="Ej: 381 555 1234">
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" id="btnAgregarCliente">+ Agregar cliente</button>
+        <button class="btn btn-outline" id="btnCancelarEdicionCliente" style="display:none;">Cancelar edición</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="field" style="max-width:340px; margin-bottom:0; flex:1;">
+          <label for="buscarClienteTabla">Buscar en la lista</label>
+          <input type="text" id="buscarClienteTabla" placeholder="Nombre, dirección o código...">
+        </div>
+        <div class="hint" id="contadorClientes" style="align-self:flex-end;"></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Código</th><th>Nombre</th><th>Dirección</th><th>Teléfono</th><th></th></tr></thead>
+          <tbody id="tablaClientes"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MENU ========== -->
+  <section class="view" id="view-menu">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Menú de platos</h2>
+          <div class="hint">Los platos principales, sus guarniciones intercambiables y el precio fijo de la vianda.</div>
+        </div>
+      </div>
+      <div id="platoEditBanner" class="hint" style="display:none; color:var(--mustard-dark); font-weight:600; margin-bottom:10px;"></div>
+      <div class="grid-3">
+        <div class="field">
+          <label for="platoNombre">Nombre del plato</label>
+          <input type="text" id="platoNombre" placeholder="Ej: Suprema">
+        </div>
+        <div class="field">
+          <label for="platoPrecio">Precio</label>
+          <input type="number" id="platoPrecio" value="7000">
+        </div>
+        <div class="field">
+          <label for="garnishNombre">Agregar guarnición</label>
+          <input type="text" id="garnishNombre" placeholder="Ej: Papas">
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px;">
+        <button class="btn btn-primary btn-small" id="btnAgregarGuarnicion">+ Agregar guarnición</button>
+        <div id="listaGuarniciones" style="display:flex; flex-wrap:wrap; gap:8px; min-height:24px;"></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:18px;">
+        <button class="btn btn-primary" id="btnAgregarPlato">+ Agregar plato</button>
+        <button class="btn btn-outline" id="btnCancelarEdicionPlato" style="display:none;">Cancelar edición</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="field" style="max-width:340px; margin-bottom:0; flex:1;">
+          <label for="buscarPlatoTabla">Buscar en la lista</label>
+          <input type="text" id="buscarPlatoTabla" placeholder="Nombre del plato...">
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Plato</th><th>Guarniciones</th><th>Precio</th><th></th></tr></thead>
+          <tbody id="tablaMenu"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CIERRE DE CAJA ========== -->
+  <section class="view" id="view-caja">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Cierre de caja</h2>
+          <div class="hint" id="fechaCajaLabel"></div>
+          <div class="hint" id="cajaAperturaEstado" style="margin-top:4px;"></div>
+        </div>
+      </div>
+
+      <div id="bloqueAbrirCaja" style="margin-bottom:18px;">
+        <button class="btn btn-primary" id="btnAbrirCaja">Abrir caja</button>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="label">Pedidos de hoy</div>
+          <div class="value" id="cajaCantPedidos">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Ventas del día</div>
+          <div class="value" id="cajaTotalFacturado">$0</div>
+        </div>
+      </div>
+
+      <h3 style="color:var(--teal-deep); font-size:1.05rem;">Platos vendidos hoy</h3>
+      <div style="overflow-x:auto; margin-bottom:20px;">
+        <table>
+          <thead><tr><th>Plato</th><th>Cantidad</th><th>Subtotal</th></tr></thead>
+          <tbody id="tablaPlatosVendidos"></tbody>
+        </table>
+      </div>
+
+      <button class="btn btn-primary" id="btnCerrarCaja">Cerrar caja</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>Historial de cierres</h2></div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Fecha</th><th>Pedidos</th><th>Ventas</th><th>Cerrado a las</th></tr></thead>
+          <tbody id="tablaHistorialCierres"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- área oculta usada solo para imprimir -->
+<div id="printArea"></div>
+
+<!-- modal genérico de confirmación -->
+<div class="modal-bg" id="modalConfirm">
+  <div class="modal">
+    <h3 id="modalTitle">Confirmar</h3>
+    <p id="modalText">¿Estás seguro?</p>
+    <div class="actions">
+      <button class="btn btn-outline btn-small" id="modalCancel">Cancelar</button>
+      <button class="btn btn-danger" id="modalOk">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal configuración del negocio -->
+<div class="modal-bg" id="modalConfig">
+  <div class="modal">
+    <h3>Datos del negocio</h3>
+    <p>Aparecen impresos en el encabezado de cada comanda.</p>
+    <div class="field" style="text-align:left;">
+      <label for="cfgNombre">Nombre del negocio</label>
+      <input type="text" id="cfgNombre">
+    </div>
+    <div class="field" style="text-align:left;">
+      <label for="cfgTelefono">Teléfono</label>
+      <input type="text" id="cfgTelefono">
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline btn-small" id="cfgCancel">Cancelar</button>
+      <button class="btn btn-primary btn-small" id="cfgGuardar">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+
+<!-- Orden de carga: cada archivo depende de los anteriores (variables y
+     funciones compartidas), por eso el orden de estos <script> importa. -->
+<script src="js/01-state.js"></script>
+<script src="js/02-utils.js"></script>
+<script src="js/03-feedback.js"></script>
+<script src="js/04-app-shell.js"></script>
+<script src="js/05-combobox.js"></script>
+<script src="js/06-menu.js"></script>
+<script src="js/07-clientes.js"></script>
+<script src="js/08-pedido.js"></script>
+<script src="js/09-ticket.js"></script>
+<script src="js/10-comandas.js"></script>
+<script src="js/11-caja.js"></script>
+<script src="js/12-init.js"></script>
+</body>
+</html>
+
+
+
