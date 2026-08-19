@@ -181,6 +181,7 @@
     width:320px; background:#fff; margin:0 auto; padding:16px 14px 20px;
     font-family:'IBM Plex Mono', monospace; font-size:0.96rem; line-height:1.35; color:#111;
     box-shadow:0 6px 20px rgba(0,0,0,0.15);
+    text-align:center;
     clip-path: polygon(
       0% 6px, 3% 0%, 6% 6px, 9% 0%, 12% 6px, 15% 0%, 18% 6px, 21% 0%, 24% 6px, 27% 0%, 30% 6px, 33% 0%, 36% 6px, 39% 0%, 42% 6px, 45% 0%, 48% 6px, 51% 0%, 54% 6px, 57% 0%, 60% 6px, 63% 0%, 66% 6px, 69% 0%, 72% 6px, 75% 0%, 78% 6px, 81% 0%, 84% 6px, 87% 0%, 90% 6px, 93% 0%, 96% 6px, 99% 0%, 100% 6px,
       100% 100%, 0% 100%
@@ -191,14 +192,17 @@
   .ticket-card .t-shop{font-family:'Fraunces'; font-weight:700; font-size:1.28rem; text-align:center;}
   .ticket-card .t-tel{text-align:center; font-size:0.9rem; color:#555; margin-bottom:6px;}
   .ticket-card hr{border:none; border-top:1px dashed #999; margin:8px 0;}
-  .ticket-card .t-row{display:flex; justify-content:space-between; margin:4px 0; font-size:1.08rem;}
+  .ticket-card .t-row{display:flex; justify-content:center; margin:4px 0; font-size:1.08rem;}
+  .ticket-card .t-row span:first-child{margin-right:10px;}
   .ticket-card .t-cliente{font-weight:700; margin-top:4px; font-size:1.08rem;}
   .ticket-card .t-direccion{font-size:1.08rem; font-weight:700;}
   .ticket-card .t-hora{font-size:1.08rem; font-weight:700;}
-  .ticket-card .t-items-head{display:flex; justify-content:space-between; font-weight:700; font-size:1.08rem; text-transform:uppercase; margin-top:10px; padding-bottom:4px; border-bottom:1px solid #111;}
-  .ticket-card .t-item{display:flex; justify-content:space-between; margin:6px 0; gap:10px; font-size:1.08rem;}
-  .ticket-card .t-item span:first-child{flex-shrink:0;}
-  .ticket-card .t-total{display:flex; justify-content:space-between; font-weight:700; font-size:1.22rem;}
+  .ticket-card .t-items-head{display:flex; justify-content:center; font-weight:700; font-size:1.08rem; text-transform:uppercase; margin-top:10px; padding-bottom:4px; border-bottom:1px solid #111;}
+  .ticket-card .t-items-head span:first-child{margin-right:24px;}
+  .ticket-card .t-item{display:flex; justify-content:center; margin:6px 0; font-size:1.08rem;}
+  .ticket-card .t-item span:first-child{flex-shrink:0; margin-right:10px;}
+  .ticket-card .t-total{display:flex; justify-content:center; font-weight:700; font-size:1.22rem;}
+  .ticket-card .t-total span:first-child{margin-right:10px;}
 
   .modal-bg{
     display:none; position:fixed; inset:0; background:rgba(21,42,44,0.55); z-index:50;
@@ -236,9 +240,9 @@
   #printArea{display:none;}
 
   @media print{
-    @page{size:80mm auto; margin:0;}
+    @page{size:100mm 148mm; margin:0;}
     html, body{
-      width:80mm;
+      width:100mm;
       margin:0;
       padding:0;
       min-height:auto !important;
@@ -250,23 +254,30 @@
     #printArea{
       display:block !important;
       position:static;
-      width:80mm;
+      width:100mm;
       margin:0;
       padding:0;
     }
     .ticket-card{
       box-shadow:none;
       clip-path:none;
-      width:72mm;
-      margin:0;
-      padding:8mm 4mm 6mm;
-      font-size:13px;
-      line-height:1.35;
+      width:86mm;
+      margin:0 auto;
+      padding:8mm 6mm 8mm;
+      font-size:16px;
+      line-height:1.45;
     }
-    /* For thermal printers: force page break (cut) after ticket */
-    .cut-page{display:block; height:0; margin:0; padding:0; page-break-after:always; break-after:page;}
-    /* Fallback: small white area to ensure cutter sees end-of-job */
-    .cut-page::after{content:"\A"; white-space:pre; display:block; height:8mm;}
+    .ticket-card .t-shop{font-size:1.75rem;}
+    .ticket-card .t-tel{font-size:1.05rem;}
+    .ticket-card .t-row,
+    .ticket-card .t-cliente,
+    .ticket-card .t-direccion,
+    .ticket-card .t-hora,
+    .ticket-card .t-items-head,
+    .ticket-card .t-item{font-size:1.4rem;}
+    .ticket-card .t-total{font-size:1.7rem;}
+    /* Papel tipo postal (100x148mm), no rollo termico: sin corte de pagina */
+    .cut-page{display:none;}
   }
 
   ::-webkit-scrollbar{height:6px; width:6px;}
