@@ -240,7 +240,7 @@
   #printArea{display:none;}
 
   @media print{
-    @page{size:100mm 148mm; margin:0;}
+    @page{size:100mm auto; margin:0;}
     html, body{
       width:100mm;
       margin:0;
@@ -276,7 +276,7 @@
     .ticket-card .t-items-head,
     .ticket-card .t-item{font-size:1.4rem;}
     .ticket-card .t-total{font-size:1.7rem;}
-    /* Papel tipo postal (100x148mm), no rollo termico: sin corte de pagina */
+    /* Alto de pagina automatico: se estira segun el contenido, como un rollo continuo */
     .cut-page{display:none;}
   }
 
