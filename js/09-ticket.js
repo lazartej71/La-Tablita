@@ -21,8 +21,7 @@ function ticketHTML(p){
       <div class="t-hora">Hora: ${p.horaEntrega}</div>
       ${p.notas ? `<div style="margin-top:4px; font-style:italic;">Nota: ${escapeHtml(p.notas)}</div>` : ''}
     </div>
-    <div class="t-items-head"><span>Cant.</span><span>Artículo</span></div>
-    ${itemsHtml}
+      ${itemsHtml}
     <div class="t-box">
       <div class="t-total"><span>Total:</span><span>${money(p.total)}</span></div>
     </div>
