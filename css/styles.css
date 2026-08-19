@@ -187,7 +187,7 @@
       100% 100%, 0% 100%
     );
   }
-  .ticket-card .t-box{border:1px solid #111; border-radius:2px; padding:8px 10px; margin:10px 0;}
+  .ticket-card .t-box{border:1px solid #111; border-radius:2px; padding:6px 10px; margin:6px 0;}
   .ticket-card .t-box:first-child{margin-top:0;}
   .ticket-card .t-shop{font-family:'Fraunces'; font-weight:700; font-size:1.28rem; text-align:center;}
   .ticket-card .t-tel{text-align:center; font-size:0.9rem; color:#555; margin-bottom:6px;}
@@ -199,7 +199,7 @@
   .ticket-card .t-hora{font-size:1.08rem; font-weight:700;}
   .ticket-card .t-items-head{display:flex; justify-content:center; font-weight:700; font-size:1.08rem; text-transform:uppercase; margin-top:10px; padding-bottom:4px; border-bottom:1px solid #111;}
   .ticket-card .t-items-head span:first-child{margin-right:24px;}
-  .ticket-card .t-item{display:flex; justify-content:center; margin:6px 0; font-size:1.08rem;}
+  .ticket-card .t-item{display:flex; justify-content:center; align-items:flex-start; margin:3px 0; font-size:1.08rem;}
   .ticket-card .t-item span:first-child{flex-shrink:0; margin-right:10px;}
   .ticket-card .t-total{display:flex; justify-content:center; font-weight:700; font-size:1.22rem;}
   .ticket-card .t-total span:first-child{margin-right:10px;}
@@ -240,9 +240,9 @@
   #printArea{display:none;}
 
   @media print{
-    @page{size:100mm auto; margin:0;}
+    @page{size:80mm auto; margin:0;}
     html, body{
-      width:100mm;
+      width:80mm;
       margin:0;
       padding:0;
       min-height:auto !important;
@@ -254,18 +254,20 @@
     #printArea{
       display:block !important;
       position:static;
-      width:100mm;
+      width:80mm;
       margin:0;
       padding:0;
     }
     .ticket-card{
       box-shadow:none;
       clip-path:none;
-      width:86mm;
+      width:72mm;
       margin:0 auto;
-      padding:8mm 6mm 8mm;
+      padding:6mm 4mm 6mm;
       font-size:16px;
       line-height:1.45;
+      page-break-inside:avoid;
+      break-inside:avoid;
     }
     .ticket-card .t-shop{font-size:1.75rem;}
     .ticket-card .t-tel{font-size:1.05rem;}
@@ -276,6 +278,12 @@
     .ticket-card .t-items-head,
     .ticket-card .t-item{font-size:1.4rem;}
     .ticket-card .t-total{font-size:1.7rem;}
+    .ticket-card .t-box,
+    .ticket-card .t-item,
+    .ticket-card .t-items-head{
+      page-break-inside:avoid;
+      break-inside:avoid;
+    }
     /* Alto de pagina automatico: se estira segun el contenido, como un rollo continuo */
     .cut-page{display:none;}
   }
