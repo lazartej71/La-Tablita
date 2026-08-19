@@ -33,7 +33,7 @@ function renderMenuSelect(){
       const ql = q.toLowerCase();
       return menu.filter(p=>p.nombre.toLowerCase().includes(ql));
     },
-    renderItem:(p)=>({title:`<strong>${escapeHtml(p.nombre)}</strong>`, sub:`${money(p.precio)}${guarniciones.length ? ' · '+escapeHtml(guarniciones.join(', ')) : ''}`}),
+    renderItem:(p)=>({title:`<strong>${escapeHtml(p.nombre)}</strong>`}),
     onSelect:(p)=>actualizarGuarnicionesYPrecio(p.id)
   });
 }
