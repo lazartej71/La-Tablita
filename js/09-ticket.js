@@ -15,8 +15,6 @@ function ticketHTML(p){
     <div class="t-box">
       <div class="t-shop">${escapeHtml(config.nombre||'La Tablita')}</div>
       <div class="t-tel">${config.telefono ? 'Tel: '+escapeHtml(config.telefono) : ''}</div>
-      <div class="t-row"><span>Nro. Ticket:</span><span>${p.ticketNro}</span></div>
-      <div class="t-row"><span>Fecha/Hora:</span><span>${fechaDisplay(p.fecha)} ${p.horaCreacion}</span></div>
     </div>
     <div class="t-box">
       <div class="t-cliente">${p.clienteCodigo!=='â€”' ? p.clienteCodigo+' ' : ''}${escapeHtml(p.clienteNombre.toUpperCase())}</div>
